@@ -1,0 +1,106 @@
+<div class="scramble-bg" id="scrambleBg"></div>
+
+<style>
+  .scramble-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    color: #333333;
+    line-height: 1;
+  }
+
+  :global(.scramble-row) {
+    display: flex;
+    white-space: nowrap;
+    gap: 0.45rem;
+    overflow: hidden;
+  }
+
+  :global(.scramble-row span) {
+    margin-right: 0.1rem;
+  }
+</style>
+
+<script>
+  const words = [
+    "system",
+    "network",
+    "signal",
+    "kernel",
+    "vector",
+    "process",
+    "binary",
+    "runtime",
+    "cipher",
+    "syntax",
+    "buffer",
+    "thread",
+    "socket",
+    "matrix",
+    "compile",
+    "render",
+    "packet",
+    "cursor",
+    "logic",
+    "stream",
+  ];
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+
+  function randomChar() {
+    return chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  function scrambleWord(word: string) {
+    return word
+      .split("")
+      .map(() => randomChar())
+      .join("");
+  }
+
+  function randomWord() {
+    return words[Math.floor(Math.random() * words.length)];
+  }
+
+  const container = document.getElementById("scrambleBg") as HTMLElement;
+  const rowCount = 40;
+
+  for (let r = 0; r < rowCount; r++) {
+    const row = document.createElement("div");
+    row.className = "scramble-row";
+    row.style.marginLeft = `-${Math.floor(Math.random() * 300)}px`;
+
+    const wordsPerRow = 50;
+    for (let i = 0; i < wordsPerRow; i++) {
+      const span = document.createElement("span");
+      const word = randomWord();
+      span.textContent = word;
+      span.dataset.original = word;
+      row.appendChild(span);
+    }
+    container.appendChild(row);
+  }
+  setInterval(() => {
+    const spans = container.querySelectorAll("span");
+    spans.forEach((span) => {
+      if (Math.random() < 0.1) {
+        const current = (
+          span.textContent || (span.dataset.original as string)
+        ).split("");
+        const randomIndex = Math.floor(Math.random() * current.length);
+        current[randomIndex] = randomChar();
+        span.textContent = current.join("");
+      }
+    });
+  }, 150);
+</script>
