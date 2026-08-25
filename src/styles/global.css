@@ -1,0 +1,19 @@
+:root {
+    --bg: #181818;
+    --text: #e5e5e5;
+    --accent-green: #00ff41;
+    --accent-green: #6f4e37;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono' , monospace;
+}
