@@ -23,12 +23,16 @@
   :global(.scramble-row) {
     display: flex;
     white-space: nowrap;
-    gap: 0.45rem;
     overflow: hidden;
   }
 
-  :global(.scramble-row span) {
-    margin-right: 0.1rem;
+  :global(.scramble-row .word) {
+    margin-right: 0.6rem;
+  }
+
+  :global(.scramble-row .letter) {
+    white-space: pre;
+    display: inline-block;
   }
 </style>
 
@@ -61,13 +65,6 @@
     return chars[Math.floor(Math.random() * chars.length)];
   }
 
-  function scrambleWord(word: string) {
-    return word
-      .split("")
-      .map(() => randomChar())
-      .join("");
-  }
-
   function randomWord() {
     return words[Math.floor(Math.random() * words.length)];
   }
@@ -82,25 +79,110 @@
 
     const wordsPerRow = 50;
     for (let i = 0; i < wordsPerRow; i++) {
-      const span = document.createElement("span");
+      const wordSpan = document.createElement("span");
+      wordSpan.className = "word";
       const word = randomWord();
-      span.textContent = word;
-      span.dataset.original = word;
-      row.appendChild(span);
+
+      word.split("").forEach((letter) => {
+        const letterSpan = document.createElement("span");
+        letterSpan.className = "letter";
+        letterSpan.textContent = letter;
+        letterSpan.dataset.original = letter;
+        wordSpan.appendChild(letterSpan);
+      });
+
+      row.appendChild(wordSpan);
     }
     container.appendChild(row);
   }
+
   setInterval(() => {
-    const spans = container.querySelectorAll("span");
-    spans.forEach((span) => {
-      if (Math.random() < 0.1) {
-        const current = (
-          span.textContent || (span.dataset.original as string)
-        ).split("");
-        const randomIndex = Math.floor(Math.random() * current.length);
-        current[randomIndex] = randomChar();
-        span.textContent = current.join("");
+    const letters = container.querySelectorAll(".letter");
+    letters.forEach((letter) => {
+      if (Math.random() < 0.03) {
+        const original = (letter as HTMLElement).dataset.original as string;
+        letter.textContent = randomChar();
+
+        setTimeout(
+          () => {
+            letter.textContent = original;
+          },
+          150 + Math.random() * 200,
+        );
       }
     });
   }, 150);
+
+  const radius = 50;
+  const cellSize = 50;
+
+  const allLetters = Array.from(container.querySelectorAll(".letter"));
+  const letterPositions = allLetters.map((el) => {
+    const rect = el.getBoundingClientRect();
+    return {
+      el: el as HTMLElement,
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      original: (el as HTMLElement).dataset.original as string,
+    };
+  });
+
+  const grid = new Map<string, typeof letterPositions>();
+  letterPositions.forEach((item) => {
+    const cx = Math.floor(item.x / cellSize);
+    const cy = Math.floor(item.y / cellSize);
+    const key = `${cx},${cy}`;
+    if (!grid.has(key)) grid.set(key, []);
+    grid.get(key)!.push(item);
+  });
+
+  let activeLetters = new Set<HTMLElement>();
+  let mouseX = -9999;
+  let mouseY = -9999;
+  let ticking = false;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    if (!ticking) {
+      requestAnimationFrame(updateHoles);
+      ticking = true;
+    }
+  });
+
+  function updateHoles() {
+    const cx = Math.floor(mouseX / cellSize);
+    const cy = Math.floor(mouseY / cellSize);
+    const cellRadius = Math.ceil(radius / cellSize);
+
+    const nowActive = new Set<HTMLElement>();
+
+    for (let gx = cx - cellRadius; gx <= cx + cellRadius; gx++) {
+      for (let gy = cy - cellRadius; gy <= cy + cellRadius; gy++) {
+        const key = `${gx},${gy}`;
+        const cell = grid.get(key);
+        if (!cell) continue;
+
+        cell.forEach((item) => {
+          const dist = Math.sqrt(
+            (mouseX - item.x) ** 2 + (mouseY - item.y) ** 2,
+          );
+          if (dist < radius) {
+            item.el.style.color = "#3ed463";
+            nowActive.add(item.el);
+          }
+        });
+      }
+    }
+
+    activeLetters.forEach((el) => {
+      if (!nowActive.has(el)) {
+        el.style.color = "";
+      }
+    });
+
+    activeLetters = nowActive;
+    ticking = false;
+  }
 </script>
