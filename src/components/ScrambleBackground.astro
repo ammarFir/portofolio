@@ -170,6 +170,7 @@
           );
           if (dist < radius) {
             item.el.style.color = "#3ed463";
+            item.el.textContent = item.original;
             nowActive.add(item.el);
           }
         });
