@@ -2,6 +2,7 @@
 import Navbar from "../components/Navbar.astro";
 import ScrambleBackground from "../components/ScrambleBackground.astro";
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
@@ -16,6 +17,7 @@ import "../styles/global.css";
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <ClientRouter />
   </head>
   <body>
     <ScrambleBackground />

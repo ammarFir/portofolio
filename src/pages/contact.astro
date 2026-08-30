@@ -1,6 +1,98 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const links = [
+  {
+    name: "Instagram",
+    url: "https://instagram.com/username",
+    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/instagram.svg",
+    command: "open instagram",
+  },
+  {
+    name: "WhatsApp",
+    url: "https://wa.me/62xxxxxxxxxx",
+    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/whatsapp.svg",
+    command: "open whatsapp",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/ammarFir",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+    command: "open github",
+  },
+];
 ---
+
 <Layout>
-	<h1>Contact</h1>
+  <div class="preview-wrapper">
+    <!-- ========== OPSI 1: ICON ROW POLOS DI TENGAH ========== -->
+    <section class="preview-block">
+      <div class="opsi1-container">
+        {
+          links.map((l) => (
+            <a
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="icon-opsi1"
+            >
+              <img src={l.icon} alt={l.name} />
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </Layout>
+
+<style>
+  .preview-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .preview-block {
+    margin-bottom: 5rem;
+    border-top: 1px dashed #333333;
+    padding-top: 2rem;
+  }
+
+  .preview-label {
+    color: #00ff41;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Opsi 1 */
+  .opsi1-container {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 2rem 0;
+  }
+
+  .icon-opsi1 {
+    display: inline-flex;
+    transition:
+      transform 0.2s ease,
+      filter 0.2s ease;
+  }
+
+  .icon-opsi1 img {
+    width: 56px;
+    height: 56px;
+    filter: invert(1) opacity(0.6);
+    transition:
+      filter 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .icon-opsi1:hover img {
+    filter: invert(1) opacity(1);
+  }
+</style>
