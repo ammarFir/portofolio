@@ -1,6 +1,179 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const projects = [
+  {
+    name: "Kantin Polhas",
+    slug: "kantin-polhas",
+    description: "Android food ordering app with buyer and seller roles.",
+    githubUrl: "https://github.com/ammarFir/kantin-polhas",
+    techIcons: [
+      {
+        name: "Kotlin",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg",
+      },
+      {
+        name: "Firebase",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+      },
+    ],
+  },
+  {
+    name: "Marlapor",
+    slug: "marlapor",
+    description:
+      "Web-based road damage reporting system with an innovation competition proposal.",
+    githubUrl: "https://github.com/ammarFir/marlapor",
+    techIcons: [
+      {
+        name: "Laravel",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
+      },
+      {
+        name: "MySQL",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+      },
+    ],
+  },
+  {
+    name: "SnapBooth",
+    slug: "snapbooth",
+    description: "Photobooth web app built for a friend's business.",
+    githubUrl: "https://github.com/ammarFir/snapbooth",
+    techIcons: [
+      {
+        name: "PHP",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
+      },
+    ],
+  },
+  {
+    name: "Zakat Tracking App",
+    slug: "zakat-tracking-app",
+    description: "Android donation tracking app for UPZ Bakti Bersama.",
+    githubUrl: "https://github.com/ammarFir/zakat-tracking-app",
+    techIcons: [
+      {
+        name: "Kotlin",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg",
+      },
+      {
+        name: "MySQL",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+      },
+    ],
+  },
+];
 ---
+
 <Layout>
-	<h1>Projects</h1>
+  <div class="projects-wrapper">
+    <div class="projects-grid">
+      {
+        projects.map((p) => (
+          <a
+            href={p.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-card"
+          >
+            <h3 class="project-name">{p.name}</h3>
+            <div class="icon-row-small">
+              {p.techIcons.slice(0, 2).map((t) => (
+                <img src={t.icon} alt={t.name} title={t.name} />
+              ))}
+            </div>
+            <div class="reveal">
+              <p class="project-desc">{p.description}</p>
+              <div class="icon-row">
+                {p.techIcons.map((t) => (
+                  <img src={t.icon} alt={t.name} title={t.name} />
+                ))}
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .projects-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .project-card {
+    display: block;
+    text-decoration: none;
+    border: 1px solid #333333;
+    border-radius: 0.4rem;
+    padding: 1.2rem;
+    overflow: hidden;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      backdrop-filter 0.2s ease;
+  }
+
+  .project-card:hover {
+    border-color: #00ff41;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .project-name {
+    color: #e5e5e5;
+    font-size: 1.1rem;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .project-desc {
+    color: #999999;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+  }
+
+  .icon-row,
+  .icon-row-small {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .icon-row img,
+  .icon-row-small img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .icon-row-small {
+    opacity: 0.6;
+  }
+
+  .reveal {
+    max-height: 0;
+    opacity: 0;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease,
+      margin-top 0.3s ease;
+  }
+
+  .project-card:hover .reveal {
+    max-height: 150px;
+    opacity: 1;
+    margin-top: 0.8rem;
+  }
+</style>
